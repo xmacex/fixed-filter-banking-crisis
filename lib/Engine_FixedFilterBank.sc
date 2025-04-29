@@ -6,7 +6,7 @@ Engine_FixedFilterBank : CroneEngine {
 	}
 
 	alloc {
-		SynthDef(\fbb, { |inL, inR, out, rq=1.0, a0=0.3, a1, a2, a3, a4, a5, a6, a7|
+		SynthDef(\fbb, { |inL, inR, out, rq=1.0, a0=0.1, a1=0.3, a2=0, a3=0.5, a4=0, a5=0, a6=0.2, a7=0|
 			var sig, f0, f1, f2, f3, f4, f5, f6, f7;
 			sig = [In.ar(inL), In.ar(inR)];
 			
