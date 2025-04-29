@@ -22,7 +22,7 @@ Engine_FixedFilterBank : CroneEngine {
 			Out.ar(out, Mix.ar([f0, f1, f2, f3, f4, f5, f6, f7])!2);
 		}).add;
 
-		content.server.sync;
+		context.server.sync;
 
 		synth = Synth.new(\fbb,
 			[
