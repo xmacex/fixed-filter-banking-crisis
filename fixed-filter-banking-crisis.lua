@@ -50,6 +50,10 @@ function init_params()
 
    params:add_taper('amp7', "amp7", 0, 1, 0)
    params:set_action('amp7', function(v) engine.amp7(v) end)
+
+   params:add_control('rq', "rq", controlspec.RQ)
+   params:set_action('rq', function(v) engine.rq(v)end)
+   params:set('rq', 1)
 end
 
 function init_ui()

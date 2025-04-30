@@ -2,7 +2,7 @@
 
 This is about controlling flows, about volatility, and about living with the risk of explosion.
 
-Eight bands.
+Eight bands and resonance.
 
 ## Requirements
 
@@ -30,8 +30,8 @@ Install with the following in Maiden
 - [ ] Default OP-Z interface with notes as shifts
 - [ ] A more straightforwards control scheme, maybe with button combos since 2^3 = 8
 - [ ] More bands?
-- [ ] Resonance control with rq
+- [x] Resonance control with rq
 - [ ] Another concept?
 - [ ] More info about banking crises?
-- [ ] Demo video or at least sounds?
+- [x] Demo video or at least sounds?
 - [ ] Retune?

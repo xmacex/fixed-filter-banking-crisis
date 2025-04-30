@@ -33,6 +33,10 @@ Engine_FixedFilterBank : CroneEngine {
 			context.xg
 		);
 
+		this.addCommand("rq", "f", {|msg|
+			synth.set(\rq, msg[1].clip(0.01, 2));
+		});
+
 		this.addCommand("amp0", "f", {|msg|
 			synth.set(\a0, msg[1]);
 		});
