@@ -15,11 +15,15 @@ NFILTERS = 8
 
 engine.name = 'FixedFilterBank'
 
+--- Lifecycle
+
 function init()
    init_params()
    init_ui()
 
    -- audio.level_monitor(0) -- FIXME mixer does not follow somehow, confusing
+   monitor_level_when_script_was_started = params:get('monitor_level')
+   params:set('monitor_level', -inf)
 end
 
 function init_params()
@@ -57,6 +61,14 @@ function init_ui()
    ui_metro:start()
 end
 
+function cleanup()
+   if params:get('monitor_level') == -inf then
+      params:set('monitor_level', monitor_level_when_script_was_started)
+   end
+end
+
+--- UI/screen
+
 function redraw()
    screen.clear()
    draw_noise()
@@ -82,6 +94,8 @@ function draw_text()
    screen.text_center_rotate(WIDTH/2, HEIGHT/2+5, "€¥£", 35)
    screen.stroke()
 end
+
+--- UI/keys and encoders
 
 function enc(n, d)
    for filter_i=0,NFILTERS-1,n+1 do
