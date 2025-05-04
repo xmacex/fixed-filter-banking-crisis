@@ -4,13 +4,17 @@ This is about controlling flows, about volatility, and about living with the ris
 
 Eight bands and resonance.
 
+![](fixed-filter-banking-crisis.gif)
+
 ## Requirements
 
 - norns
 
 ## Usage
 
-Use <kbd>E1</kbd>, <kbd>E2</kbd> and <kbd>E3</kbd> to adjust the bands. More fun, map the parameters to some MIDI controller or use the TouchOSC control surface in this repo. 
+Use <kbd>E1</kbd>, <kbd>E2</kbd> and <kbd>E3</kbd> to adjust the bands. More fun, map the parameters to some MIDI controller or use the TouchOSC control surface in this repo.
+
+![](fixed-filter-banking-crisis-touchosc.gif)
 
 ## Installation
 
