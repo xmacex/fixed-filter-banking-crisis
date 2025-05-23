@@ -26,12 +26,13 @@ Install with the following in Maiden
 
 ## Ideas
 
-- [ ] The routing is kind of funny. Think about that
+- [ ] The engine routing is kind of funny. Think about that
 - [ ] Could have some modes
 - [ ] crow interface
 - [ ] grid interface
 - [ ] arc interface?
 - [x] touchosc interface?
+- [x] reflect params on touchosc interface
 - [ ] Default OP-Z interface with notes as shifts
 - [ ] A more straightforwards control scheme, maybe with button combos since 2^3 = 8
 - [ ] More bands?
