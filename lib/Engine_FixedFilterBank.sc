@@ -7,19 +7,34 @@ Engine_FixedFilterBank : CroneEngine {
 
 	alloc {
 		SynthDef(\fbb, { |inL, inR, out, rq=1.0, a0=0.1, a1=0.3, a2=0, a3=0.5, a4=0, a5=0, a6=0.2, a7=0|
-			var sig, f0, f1, f2, f3, f4, f5, f6, f7;
-			sig = [In.ar(inL), In.ar(inR)];
-			
-			f0 = BPF.ar(sig,    55, rq, a0);
-			f1 = BPF.ar(sig,   111, rq, a1);
-			f2 = BPF.ar(sig,   222, rq, a2);
-			f3 = BPF.ar(sig,   555, rq, a3);
-			f4 = BPF.ar(sig,  1111, rq, a4);
-			f5 = BPF.ar(sig,  2222, rq, a5);
-			f6 = BPF.ar(sig,  5555, rq, a6);
-			f7 = BPF.ar(sig, 11111, rq, a7);
+			var f0, f1, f2, f3, f4, f5, f6, f7;
 
-			Out.ar(out, Mix.ar([f0, f1, f2, f3, f4, f5, f6, f7])!2);
+			var inputL = SoundIn.ar(0);
+			var inputR = SoundIn.ar(1);
+
+			var filtersL = Mix.ar([
+				BPF.ar(inputL,    55, rq, a0),
+				BPF.ar(inputL,   111, rq, a1),
+				BPF.ar(inputL,   222, rq, a2),
+				BPF.ar(inputL,   555, rq, a3),
+				BPF.ar(inputL,  1111, rq, a4),
+				BPF.ar(inputL,  2222, rq, a5),
+				BPF.ar(inputL,  5555, rq, a6),
+				BPF.ar(inputL, 11111, rq, a7)
+            ]);
+
+			var filtersR = Mix.ar([
+				BPF.ar(inputR,    55*1.1, rq, a0),
+				BPF.ar(inputR,   111*1.1, rq, a1),
+				BPF.ar(inputR,   222*1.1, rq, a2),
+				BPF.ar(inputR,   555*1.1, rq, a3),
+				BPF.ar(inputR,  1111*1.1, rq, a4),
+				BPF.ar(inputR,  2222*1.1, rq, a5),
+				BPF.ar(inputR,  5555*1.1, rq, a6),
+				BPF.ar(inputR, 11111*1.1, rq, a7)
+            ]);
+
+			Out.ar(out, [filtersL, filtersR])
 		}).add;
 
 		context.server.sync;
