@@ -6,10 +6,16 @@
 -- E2 adjust some bands
 -- E3 adjust some bands
 --
+-- crow
+-- → 1 choose band or rq
+-- → 2 set value
+--
 -- by xmacex
 
 WIDTH  = 128
 HEIGHT = 64
+
+MAXV = 10
 
 NFILTERS = 8
 
@@ -18,16 +24,18 @@ engine.name = 'FixedFilterBank'
 osc_controller_host = nil
 OSC_CONTROLLER_PORT = 8002
 
+selected_param = 'amp0'
+
 --- Lifecycle
 
 function init()
    init_params()
+   init_crow()
    init_ui()
 
-   -- audio.level_monitor(0) -- FIXME mixer does not follow somehow, confusing
    monitor_level_when_script_was_started = params:get('monitor_level')
    params:set('monitor_level', -inf)
-   
+
    osc.event = osc_remember_host
 end
 
@@ -85,6 +93,21 @@ function init_params()
    params:set('rq', 1)
 end
 
+function init_crow()
+   crow.input[1].mode('window', {0, 1, 2, 3, 4, 5, 6, 7}, 0)
+   crow.input[1].window = function(w)
+      if w == 1 then
+	 selected_param = 'rq'
+      else
+	 selected_param = 'amp'..w-2
+      end
+      crow.input[2].query()
+   end
+
+   crow.input[2].mode('none')
+   crow.input[2].stream = process_crow_param_selection
+end
+
 function init_ui()
    ui_metro = metro.init()
    ui_metro.time = 1.0 / 15
@@ -134,6 +157,18 @@ function enc(n, d)
    for filter_i=0,NFILTERS-1,n+1 do
       params:delta("amp"..filter_i, d)
    end
+end
+
+--- UI/crow
+
+function process_crow_param_selection(v)
+   scaled_value = nil
+   if selected_param == 'rq' then
+      scaled_value = util.linlin(0, MAXV, params:get_range(selected_param)[2], params:get_range(selected_param)[1], v)
+   else
+      scaled_value = util.linlin(0, MAXV, params:get_range(selected_param)[1], params:get_range(selected_param)[2], v)
+   end
+   params:set(selected_param, scaled_value)
 end
 
 --- UI/OSC
