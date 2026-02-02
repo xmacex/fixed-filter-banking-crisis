@@ -44,60 +44,28 @@ end
 
 function init_params()
    params:add_taper('amp0', "amp0", 0, 1, 0.1)
-   params:set_action('amp0', function(v)
-     engine.amp0(v)
-     grid_bar(0, v)
-     osc_update("amp0", v)
-   end)
+   params:set_action('amp0', function(v) set_band(0, v) end)
 
    params:add_taper('amp1', "amp1", 0, 1, 0.3)
-   params:set_action('amp1', function(v)
-     engine.amp1(v)
-     grid_bar(1, v)
-     osc_update("amp1", v)
-   end)
+   params:set_action('amp1', function(v) set_band(1, v) end)
 
    params:add_taper('amp2', "amp2", 0, 1, 0)
-   params:set_action('amp2', function(v)
-     engine.amp2(v)
-     grid_bar(2, v)
-     osc_update("amp2", v)
-   end)
+   params:set_action('amp2', function(v) set_band(2, v) end)
 
    params:add_taper('amp3', "amp3", 0, 1, 0.5)
-   params:set_action('amp3', function(v)
-     engine.amp3(v)
-     grid_bar(3, v)
-     osc_update("amp3", v)
-   end)
+   params:set_action('amp3', function(v) set_band(3, v) end)
 
    params:add_taper('amp4', "amp4", 0, 1, 0)
-   params:set_action('amp4', function(v)
-     engine.amp4(v)
-     grid_bar(4, v)
-     osc_update("amp4", v)
-   end)
+   params:set_action('amp4', function(v) set_band(4, v) end)
 
    params:add_taper('amp5', "amp5", 0, 1, 0)
-   params:set_action('amp5', function(v)
-     engine.amp5(v)
-     grid_bar(5, v)
-     osc_update("amp5", v)
-   end)
+   params:set_action('amp5', function(v) set_band(5, v) end)
 
    params:add_taper('amp6', "amp6", 0, 1, 0.2)
-   params:set_action('amp6', function(v)
-     engine.amp6(v)
-     grid_bar(6, v)
-     osc_update("amp6", v)
-   end)
+   params:set_action('amp6', function(v) set_band(6, v) end)
 
    params:add_taper('amp7', "amp7", 0, 1, 0)
-   params:set_action('amp7', function(v)
-     engine.amp7(v)
-     grid_bar(7, v)
-     osc_update("amp7", v)
-   end)
+   params:set_action('amp7', function(v) set_band(7, v) end)
 
    params:add_control('rq', "rq", controlspec.RQ)
    params:set_action('rq', function(v) engine.rq(v)end)
@@ -135,6 +103,14 @@ function cleanup()
    if params:get('monitor_level') == -inf then
       params:set('monitor_level', monitor_level_when_script_was_started)
    end
+end
+
+--- paramater update
+
+function set_band(band, value)
+   engine.commands['amp'..band].func(value)
+   grid_bar(band, value)
+   osc_update('amp'..band, value)
 end
 
 --- UI/screen
