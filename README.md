@@ -16,7 +16,9 @@ Use <kbd>E1</kbd>, <kbd>E2</kbd> and <kbd>E3</kbd> to adjust the bands. More fun
 
 ![](fixed-filter-banking-crisis-touchosc.gif)
 
-crow <kbd>input 1</kbd> selects one of the bands in ascending order with positive voltage, or *rq* with negative voltage.It is set to what <kbd>input 2</kbd> when a selection is made.
+crow <kbd>input 1</kbd> selects one of the bands in ascending order with positive voltage, or *rq* with negative voltage. It is set to what <kbd>input 2</kbd> when a selection is made.
+
+Use grid to control the band amplitudes.
 
 This script can also work as an effect using the [fx mod](https://llllllll.co/t/fx-mod/62726) framework. A separate TouchOSC control surface is provided.
 
@@ -36,7 +38,7 @@ To use the mod, enable it in the MODS menu, restart, and then find it in your us
 - [ ] Could have some modes
 - [x] fx mod
 - [x] crow interface
-- [ ] grid interface
+- [x] grid interface
 - [ ] arc interface?
 - [x] touchosc interface?
 - [x] reflect params on touchosc interface

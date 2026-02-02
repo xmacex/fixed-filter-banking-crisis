@@ -21,6 +21,8 @@ NFILTERS = 8
 
 engine.name = 'FixedFilterBank'
 
+g = grid.connect()
+
 osc_controller_host = nil
 OSC_CONTROLLER_PORT = 8002
 
@@ -31,6 +33,7 @@ selected_param = 'amp0'
 function init()
    init_params()
    init_crow()
+   init_grid()
    init_ui()
 
    monitor_level_when_script_was_started = params:get('monitor_level')
@@ -43,48 +46,56 @@ function init_params()
    params:add_taper('amp0', "amp0", 0, 1, 0.1)
    params:set_action('amp0', function(v)
      engine.amp0(v)
+     grid_bar(0, v)
      osc_update("amp0", v)
    end)
 
    params:add_taper('amp1', "amp1", 0, 1, 0.3)
    params:set_action('amp1', function(v)
      engine.amp1(v)
+     grid_bar(1, v)
      osc_update("amp1", v)
    end)
 
    params:add_taper('amp2', "amp2", 0, 1, 0)
    params:set_action('amp2', function(v)
      engine.amp2(v)
+     grid_bar(2, v)
      osc_update("amp2", v)
    end)
 
    params:add_taper('amp3', "amp3", 0, 1, 0.5)
    params:set_action('amp3', function(v)
      engine.amp3(v)
+     grid_bar(3, v)
      osc_update("amp3", v)
    end)
 
    params:add_taper('amp4', "amp4", 0, 1, 0)
    params:set_action('amp4', function(v)
      engine.amp4(v)
+     grid_bar(4, v)
      osc_update("amp4", v)
    end)
 
    params:add_taper('amp5', "amp5", 0, 1, 0)
    params:set_action('amp5', function(v)
      engine.amp5(v)
+     grid_bar(5, v)
      osc_update("amp5", v)
    end)
 
    params:add_taper('amp6', "amp6", 0, 1, 0.2)
    params:set_action('amp6', function(v)
      engine.amp6(v)
+     grid_bar(6, v)
      osc_update("amp6", v)
    end)
 
    params:add_taper('amp7', "amp7", 0, 1, 0)
    params:set_action('amp7', function(v)
      engine.amp7(v)
+     grid_bar(7, v)
      osc_update("amp7", v)
    end)
 
@@ -107,6 +118,9 @@ function init_crow()
    crow.input[2].mode('none')
    crow.input[2].stream = process_crow_param_selection
 end
+
+-- Placeholder if I need it
+function init_grid() return end
 
 function init_ui()
    ui_metro = metro.init()
@@ -169,6 +183,32 @@ function process_crow_param_selection(v)
       scaled_value = util.linlin(0, MAXV, params:get_range(selected_param)[1], params:get_range(selected_param)[2], v)
    end
    params:set(selected_param, scaled_value)
+end
+
+--- UI/grid
+
+g.key = function(x, y, z)
+   local band = x-1
+   if z == 1 then
+      if y == g.rows and params:get('amp'..band) <= 1/g.rows and params:get('amp'..band) > 0 then
+	 params:set('amp'..band, 0)
+      else
+	 local value=util.linlin(1, g.rows+1, 1, 0, y)
+	 params:set('amp'..band, value)
+      end
+   end
+end
+
+function grid_bar(band, value)
+   local x=band+1
+   for i=1,g.rows do
+      if i > g.rows*value then
+	 g:led(x, g.rows-i+1, 0)
+      else
+	 g:led(x, g.rows-i+1, 5)
+      end
+   end
+   g:refresh()
 end
 
 --- UI/OSC
