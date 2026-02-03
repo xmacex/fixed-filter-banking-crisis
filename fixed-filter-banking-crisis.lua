@@ -89,6 +89,8 @@ function init_crow()
    crow.input[2].stream = process_crow_param_selection
 end
 
+norns.crow.add = init_crow
+
 -- Placeholder if I need it
 function init_grid() return end
 
