@@ -5,9 +5,10 @@
 -- E1 adjust some bands
 -- E2 adjust some bands
 -- E3 adjust some bands
+--   K+E adjust rq
 --
 -- crow
--- → 1 choose band or rq
+-- → 1 +=choose band -=rq
 -- → 2 set value
 --
 -- by xmacex
@@ -27,6 +28,7 @@ local osc_controller_host = nil
 local OSC_CONTROLLER_PORT = 8002
 
 local selected_param = 'amp0'
+local shift = false
 
 --- Lifecycle
 
@@ -145,9 +147,17 @@ end
 --- UI/keys and encoders
 
 function enc(n, d)
-   for filter_i=0,NFILTERS-1,n+1 do
-      params:delta('amp'..filter_i, d)
+   if shift then
+      params:delta('rq', d)
+   else
+      for filter_i=0,NFILTERS-1,n+1 do
+	 params:delta('amp'..filter_i, d)
+      end
    end
+end
+
+function key(k, z)
+   shift = (z == 1) or false
 end
 
 --- UI/crow
