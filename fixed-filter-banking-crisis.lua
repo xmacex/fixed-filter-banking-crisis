@@ -12,21 +12,21 @@
 --
 -- by xmacex
 
-WIDTH  = 128
-HEIGHT = 64
+local WIDTH  = 128
+local HEIGHT = 64
 
-MAXV = 10
+local MAXV = 10
 
-NFILTERS = 8
+local NFILTERS = 8
 
 engine.name = 'FixedFilterBank'
 
 g = grid.connect()
 
-osc_controller_host = nil
-OSC_CONTROLLER_PORT = 8002
+local osc_controller_host = nil
+local OSC_CONTROLLER_PORT = 8002
 
-selected_param = 'amp0'
+local selected_param = 'amp0'
 
 --- Lifecycle
 
@@ -109,7 +109,7 @@ end
 
 function set_band(band, value)
    engine.commands['amp'..band].func(value)
-   grid_bar(band, value)
+   grid_band(band, value)
    osc_update('amp'..band, value)
 end
 
@@ -125,9 +125,10 @@ end
 function draw_noise()
    local BWIDTH = WIDTH / NFILTERS
    for filter_i=0,NFILTERS-1 do
-      screen.level(util.round((params:get("amp"..filter_i))+1)*2)
-      for spec=0, math.floor(params:get("amp"..filter_i)*100) do
-         screen.pixel(BWIDTH*filter_i + math.random(BWIDTH), HEIGHT-math.random(HEIGHT))
+      local BCENTER = BWIDTH*filter_i+(BWIDTH/2)
+      screen.level(util.round(util.linlin(0, 1, 1, 4, params:get('amp'..filter_i))))
+      for spec=0, math.floor(params:get('amp'..filter_i)*100) do
+	 screen.pixel(BCENTER + math.random(-BWIDTH/2, BWIDTH/2)*params:get('rq'), HEIGHT-math.random(HEIGHT))
       end
       screen:fill()
    end
@@ -136,7 +137,7 @@ end
 function draw_text()
    screen.font_face(math.random(20))
    screen.font_size(20)
-   screen.level(5)
+   screen.level(13)
    screen.text_center_rotate(WIDTH/2, HEIGHT/2+5, "€¥£", 35)
    screen.stroke()
 end
@@ -145,7 +146,7 @@ end
 
 function enc(n, d)
    for filter_i=0,NFILTERS-1,n+1 do
-      params:delta("amp"..filter_i, d)
+      params:delta('amp'..filter_i, d)
    end
 end
 
@@ -175,7 +176,7 @@ g.key = function(x, y, z)
    end
 end
 
-function grid_bar(band, value)
+function grid_band(band, value)
    local x=band+1
    for i=1,g.rows do
       if i > g.rows*value then
@@ -191,12 +192,12 @@ end
 
 function osc_remember_host(path, args, source)
   host, port = table.unpack(source)
-  if host ~= "127.0.0.1" then
+  if host ~= '127.0.0.1' then
     if not osc_controller_host then -- update the OSC control surface
       osc_controller_host = host
       print("🎚🎚🎚🎚🎚🎚🎚🎚 refreshing the OSC️ surface")
       for filter_i=0,7 do
-        osc_update("amp"..filter_i, params:get("amp"..filter_i))
+        osc_update('amp'..filter_i, params:get('amp'..filter_i))
       end
     end
     osc_controller_host = host
@@ -205,6 +206,10 @@ end
 
 function osc_update(param, value)
   if osc_controller_host then
-    osc.send({osc_controller_host, OSC_CONTROLLER_PORT}, "/param/"..param, {value})
+    osc.send({osc_controller_host, OSC_CONTROLLER_PORT}, '/param/'..param, {value})
   end
 end
+
+-- Local Variables:
+-- flycheck-luacheck-standards: ("lua51" "norns")
+-- End:
