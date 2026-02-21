@@ -16,7 +16,8 @@
 local WIDTH  = 128
 local HEIGHT = 64
 
-local MAXV = 10
+local MAXV = 5
+local MINV = -5
 
 local NFILTERS = 8
 
@@ -45,28 +46,28 @@ function init()
 end
 
 function init_params()
-   params:add_taper('amp0', "amp0", 0, 1, 0.1)
+   params:add_taper('amp0', "amp0", -1.5, 1.5, 0.1)
    params:set_action('amp0', function(v) set_band(0, v) end)
 
-   params:add_taper('amp1', "amp1", 0, 1, 0.3)
+   params:add_taper('amp1', "amp1", -1.5, 1.5, 0.3)
    params:set_action('amp1', function(v) set_band(1, v) end)
 
-   params:add_taper('amp2', "amp2", 0, 1, 0)
+   params:add_taper('amp2', "amp2", -1.5, 1.5, 0)
    params:set_action('amp2', function(v) set_band(2, v) end)
 
-   params:add_taper('amp3', "amp3", 0, 1, 0.5)
+   params:add_taper('amp3', "amp3", -1.5, 1.5, 0.5)
    params:set_action('amp3', function(v) set_band(3, v) end)
 
-   params:add_taper('amp4', "amp4", 0, 1, 0)
+   params:add_taper('amp4', "amp4", -1.5, 1.5, 0)
    params:set_action('amp4', function(v) set_band(4, v) end)
 
-   params:add_taper('amp5', "amp5", 0, 1, 0)
+   params:add_taper('amp5', "amp5", -1.5, 1.5, 0)
    params:set_action('amp5', function(v) set_band(5, v) end)
 
-   params:add_taper('amp6', "amp6", 0, 1, 0.2)
+   params:add_taper('amp6', "amp6", -1.5, 1.5, 0.2)
    params:set_action('amp6', function(v) set_band(6, v) end)
 
-   params:add_taper('amp7', "amp7", 0, 1, 0)
+   params:add_taper('amp7', "amp7", -1.5, 1.5, 0)
    params:set_action('amp7', function(v) set_band(7, v) end)
 
    params:add_control('rq', "rq", controlspec.RQ)
@@ -130,8 +131,8 @@ function draw_noise()
    local BWIDTH = WIDTH / NFILTERS
    for filter_i=0,NFILTERS-1 do
       local BCENTER = BWIDTH*filter_i+(BWIDTH/2)
-      screen.level(util.round(util.linlin(0, 1, 1, 4, params:get('amp'..filter_i))))
-      for spec=0, math.floor(params:get('amp'..filter_i)*100) do
+      screen.level(util.round(util.linlin(0, 1, 1, 4, math.abs(params:get('amp'..filter_i)))))
+      for spec=0, math.floor(math.abs(params:get('amp'..filter_i)*100)) do
 	 screen.pixel(BCENTER + math.random(-BWIDTH/2, BWIDTH/2)*params:get('rq'), HEIGHT-math.random(HEIGHT))
       end
       screen:fill()
@@ -169,7 +170,7 @@ function process_crow_param_selection(v)
    if selected_param == 'rq' then
       scaled_value = util.linlin(0, MAXV, params:get_range(selected_param)[2], params:get_range(selected_param)[1], v)
    else
-      scaled_value = util.linlin(0, MAXV, params:get_range(selected_param)[1], params:get_range(selected_param)[2], v)
+      scaled_value = util.linlin(MINV, MAXV, params:get_range(selected_param)[1], params:get_range(selected_param)[2], v)
    end
    params:set(selected_param, scaled_value)
 end

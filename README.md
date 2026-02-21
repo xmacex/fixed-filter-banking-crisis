@@ -12,6 +12,8 @@ Eight bands and resonance.
 
 ## Usage
 
+Each band has an attenuverter with 1.5 amplification.
+
 Use <kbd>E1</kbd>, <kbd>E2</kbd> and <kbd>E3</kbd> to adjust the bands. More fun, map the parameters to some MIDI controller or use the TouchOSC control surface in this repo.
 
 ![](fixed-filter-banking-crisis-touchosc.gif)
