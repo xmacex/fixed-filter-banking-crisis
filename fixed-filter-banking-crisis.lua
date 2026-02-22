@@ -178,24 +178,38 @@ end
 --- UI/grid
 
 g.key = function(x, y, z)
-   local band = x-1
    if z == 1 then
-      if y == g.rows and params:get('amp'..band) <= 1/g.rows and params:get('amp'..band) > 0 then
-	 params:set('amp'..band, 0)
+      local band   = x-1
+      local curval = params:get('amp'..band)
+      local minval = params:get_range('amp'..band)[1]
+      local maxval = params:get_range('amp'..band)[2]
+      -- TODO erm there must be a more concise logic for this idea of setting the value to zero if the button closest to the 0 would be pressed again.
+      if (y == g.rows/2   and curval > 0 and curval < 1/(g.rows/2))
+         or (y == g.rows/2+1 and curval < 0 and curval > -1/(g.rows/2)) then
+         params:set('amp'..band, 0)
       else
-	 local value=util.linlin(1, g.rows+1, 1, 0, y)
-	 params:set('amp'..band, value)
+         local value = util.linlin(1, g.rows, maxval, minval, y)
+         params:set('amp'..band, value)
       end
    end
 end
 
 function grid_band(band, value)
-   local x=band+1
+   local x      = band+1
+   local minval = params:get_range('amp'..band)[1]
+   local maxval = params:get_range('amp'..band)[2]
+   -- clear the band
    for i=1,g.rows do
-      if i > g.rows*value then
-	 g:led(x, g.rows-i+1, 0)
-      else
-	 g:led(x, g.rows-i+1, 5)
+      g:led(x, i, 0)
+   end
+   -- draw a bar from the center up or down to the value
+   if value > 0 then
+      for i=0, util.linlin(0, maxval, 0, g.rows/2, value)-1 do
+         g:led(x, g.rows/2-i, 5)
+      end
+   elseif value < 0 then
+      for i=1, util.linlin(minval, 0, g.rows/2, 0, value) do
+	 g:led(x, g.rows/2+i, 5)
       end
    end
    g:refresh()
