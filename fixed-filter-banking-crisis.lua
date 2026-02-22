@@ -198,18 +198,11 @@ function grid_band(band, value)
    local x      = band+1
    local minval = params:get_range('amp'..band)[1]
    local maxval = params:get_range('amp'..band)[2]
-   -- clear the band
    for i=1,g.rows do
-      g:led(x, i, 0)
-   end
-   -- draw a bar from the center up or down to the value
-   if value > 0 then
-      for i=0, util.linlin(0, maxval, 0, g.rows/2, value)-1 do
-         g:led(x, g.rows/2-i, 5)
-      end
-   elseif value < 0 then
-      for i=1, util.linlin(minval, 0, g.rows/2, 0, value) do
-	 g:led(x, g.rows/2+i, 5)
+      if value ~= 0 and i == util.round(util.linlin(minval, maxval, g.rows, 1, value)) then
+         g:led(x,i,5)
+      else
+         g:led(x,i,0)
       end
    end
    g:refresh()
