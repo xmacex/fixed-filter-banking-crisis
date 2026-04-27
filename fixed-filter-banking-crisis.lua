@@ -10,6 +10,8 @@
 -- crow
 -- → 1 +=choose band -=rq
 -- → 2 set value
+--   1 left amplitude    →
+--   2 right amplitude   →
 --
 -- by xmacex
 
@@ -31,10 +33,24 @@ local OSC_CONTROLLER_PORT = 8002
 local selected_param = 'amp0'
 local shift = false
 
+amp = {
+   l ={
+      poll = nil,
+      data = {0, 0, 0, 0, 0, 0, 0, 0},
+      avg = 0
+   },
+   r = {
+      poll = nil,
+      data = {0, 0, 0, 0, 0, 0, 0, 0},
+      avg = 0
+   }
+}
+
 --- Lifecycle
 
 function init()
    init_params()
+   init_polls()
    init_crow()
    init_grid()
    init_ui()
@@ -71,8 +87,44 @@ function init_params()
    params:set_action('amp7', function(v) set_band(7, v) end)
 
    params:add_control('rq', "rq", controlspec.RQ)
-   params:set_action('rq', function(v) engine.rq(v)end)
+   params:set_action('rq', function(v) engine.rq(v) end)
    params:set('rq', 1)
+
+   params:add_taper('slew', "envelope smooth", 0, 1, 0.05, 0)
+   params:set_action('slew', function(v)
+			crow.output[1].slew = v
+			crow.output[2].slew = v
+   end)
+end
+
+function init_polls()
+   amp["l"].poll = poll.set("amp_out_l")
+   amp["l"].poll.callback = function(v)
+      local sum = 0
+      table.remove(amp["l"].data)
+      table.insert(amp["l"].data, 1, v)
+      for _,d in ipairs(amp["l"].data) do
+	 sum = sum + d
+      end
+      amp["l"].avg = sum/tab.count(amp["l"].data)
+      crow.output[1].volts = util.linlin(0, 0.3, 0, 10, amp["l"].avg)
+   end
+   amp["l"].poll.time = 1/200
+   amp["l"].poll:start()
+
+   amp["r"].poll = poll.set("amp_out_r")
+   amp["r"].poll.callback = function(v)
+      local sum = 0
+      table.remove(amp["r"].data)
+      table.insert(amp["r"].data, 1, v)
+      for _,d in ipairs(amp["r"].data) do
+	 sum = sum + d
+      end
+      amp["r"].avg = sum/tab.count(amp["r"].data)
+      crow.output[2].volts = util.linlin(0, 0.3, 0, 10, amp["r"].avg)
+   end
+   amp["r"].poll.time = 1/200
+   amp["r"].poll:start()
 end
 
 function init_crow()
@@ -88,6 +140,9 @@ function init_crow()
 
    crow.input[2].mode('none')
    crow.input[2].stream = process_crow_param_selection
+
+   crow.output[1].slew = 0.05
+   crow.output[2].slew = 0.05
 end
 
 norns.crow.add = init_crow
