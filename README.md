@@ -32,6 +32,11 @@ Install with the following in Maiden
 ;install https://github.com/xmacex/fixed-filter-banking-crisis
 ```
 
+This script required [fx mod](https://llllllll.co/t/fx-mod/62726). Install with
+```
+;install https://github.com/sixolet/fx
+```
+
 To use the mod, enable it in the MODS menu, restart, and then find it in your usual parameters as *fx ffbc*.
 
 ## Ideas
