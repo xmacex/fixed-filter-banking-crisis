@@ -88,7 +88,7 @@ function init_params()
 
    params:add_control('rq', "rq", controlspec.RQ)
    params:set_action('rq', function(v) engine.rq(v) end)
-   params:set('rq', 1)
+   params:set('rq', 0.2)
 
    params:add_taper('slew', "envelope smooth", 0, 1, 0.05, 0)
    params:set_action('slew', function(v)

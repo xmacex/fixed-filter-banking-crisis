@@ -17,10 +17,11 @@ function FxFfbc:add_params()
     FxFfbc:add_taper("fx_ffbc_amp6", "amp6", "amp6", -1.5, 1.5, 0.2)
     FxFfbc:add_taper("fx_ffbc_amp7", "amp7", "amp7", -1.5, 1.5, 0.0)
     FxFfbc:add_control("fx_ffbc_rq", "rq", "rq", controlspec.RQ)
+    params:set('fx_ffbc_rq', 0.2)
 end
 
 mod.hook.register("script_pre_init", "ffbc mod pre init", function()
-                  FxFfbc:install()
+                  FxFfbc:add_params()
 end)
 
 mod.hook.register("script_post_cleanup", "ffbc mod post cleanup", function()

@@ -9,7 +9,7 @@ FxFixedFilterBankingCrisis : FxBase {
 			amp5: 0.0,
 			amp6: 0.2,
 			amp7: 0.0,
-			rq:   1,
+			rq:   0.2,
 		), nil, 1);
 		^ret;
 	}
@@ -27,7 +27,7 @@ FxFixedFilterBankingCrisis : FxBase {
 	}
 
 	addSynthdefs {
-		SynthDef(\fxFfbc, { |inBus, outBus| //, rq=1.0, amp0=0.1, amp1=0.3, amp2=0, amp3=0.5, amp4=0, amp5=0, amp6=0.2, amp7=0|
+		SynthDef(\fxFfbc, { |inBus, outBus| //, rq=0.2, amp0=0.1, amp1=0.3, amp2=0, amp3=0.5, amp4=0, amp5=0, amp6=0.2, amp7=0|
 			var f0, f1, f2, f3, f4, f5, f6, f7;
 
 			var inputL = In.ar(inBus, 2)[0];
