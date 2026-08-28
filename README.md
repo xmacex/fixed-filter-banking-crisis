@@ -9,6 +9,7 @@ Eight bands and resonance.
 ## Requirements
 
 - norns
+- [fx mod](https://llllllll.co/t/fx-mod/62726) installed
 
 ## Usage
 
@@ -32,7 +33,7 @@ Install with the following in Maiden
 ;install https://github.com/xmacex/fixed-filter-banking-crisis
 ```
 
-This script required [fx mod](https://llllllll.co/t/fx-mod/62726). Install with
+Because this script ships also as an effect, it requires [fx mod](https://llllllll.co/t/fx-mod/62726). Install with
 ```
 ;install https://github.com/sixolet/fx
 ```
@@ -51,9 +52,9 @@ To use the mod, enable it in the MODS menu, restart, and then find it in your us
 - [x] reflect params on touchosc interface
 - [ ] Default OP-Z interface with notes as shifts
 - [ ] A more straightforwards control scheme, maybe with button combos since 2^3 = 8
-- [ ] More bands?
+- [ ] ~~More bands?~~
 - [x] Resonance control with rq
-- [ ] Another concept?
+- [x] ~~Another concept?~~
 - [ ] More info about banking crises?
 - [x] Demo video or at least sounds?
 - [ ] Retune?
