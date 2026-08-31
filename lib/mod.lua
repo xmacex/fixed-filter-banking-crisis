@@ -6,25 +6,27 @@ local FxFfbc = fx:new{
 }
 
 function FxFfbc:add_params()
-    params:add_group("fx_ffbc", "FX FFBC", 9+2)
-    FxFfbc:add_slot("fx_ffbc_slot", "slot")
-    FxFfbc:add_taper("fx_ffbc_amp0", "amp0", "amp0", -1.5, 1.5, 0.1)
-    FxFfbc:add_taper("fx_ffbc_amp1", "amp1", "amp1", -1.5, 1.5, 0.3)
-    FxFfbc:add_taper("fx_ffbc_amp2", "amp2", "amp2", -1.5, 1.5, 0.0)
-    FxFfbc:add_taper("fx_ffbc_amp3", "amp3", "amp3", -1.5, 1.5, 0.5)
-    FxFfbc:add_taper("fx_ffbc_amp4", "amp4", "amp4", -1.5, 1.5, 0.0)
-    FxFfbc:add_taper("fx_ffbc_amp5", "amp5", "amp5", -1.5, 1.5, 0.0)
-    FxFfbc:add_taper("fx_ffbc_amp6", "amp6", "amp6", -1.5, 1.5, 0.2)
-    FxFfbc:add_taper("fx_ffbc_amp7", "amp7", "amp7", -1.5, 1.5, 0.0)
-    FxFfbc:add_control("fx_ffbc_rq", "rq", "rq", controlspec.RQ)
+    params:add_group('fx_ffbc', "FX FFBC", 11+2)
+    FxFfbc:add_slot('fx_ffbc_slot', "slot")
+    FxFfbc:add_taper('fx_ffbc_amp0', "amp0", 'amp0', -1.5, 1.5, 0.1)
+    FxFfbc:add_taper('fx_ffbc_amp1', "amp1", 'amp1', -1.5, 1.5, 0.3)
+    FxFfbc:add_taper('fx_ffbc_amp2', "amp2", 'amp2', -1.5, 1.5, 0.0)
+    FxFfbc:add_taper('fx_ffbc_amp3', "amp3", 'amp3', -1.5, 1.5, 0.5)
+    FxFfbc:add_taper('fx_ffbc_amp4', "amp4", 'amp4', -1.5, 1.5, 0.0)
+    FxFfbc:add_taper('fx_ffbc_amp5', "amp5", 'amp5', -1.5, 1.5, 0.0)
+    FxFfbc:add_taper('fx_ffbc_amp6', "amp6", 'amp6', -1.5, 1.5, 0.2)
+    FxFfbc:add_taper('fx_ffbc_amp7', "amp7", 'amp7', -1.5, 1.5, 0.0)
+    FxFfbc:add_control("fx_ffbc_rq", "rq", 'rq', controlspec.RQ)
     params:set('fx_ffbc_rq', 0.2)
+    FxFfbc:add_taper('fx_ffbc_fb_amount', "fb amount", 'fb_amount', -0.99, 0.99, 0.0)
+    FxFfbc:add_taper('fx_ffbc_fb_delay',  "fb delay",  'fb_delay',      0,  0.2, 0.1)
 end
 
-mod.hook.register("script_pre_init", "ffbc mod pre init", function()
+mod.hook.register('script_pre_init', "ffbc mod pre init", function()
                   FxFfbc:add_params()
 end)
 
-mod.hook.register("script_post_cleanup", "ffbc mod post cleanup", function()
+mod.hook.register('script_post_cleanup', "ffbc mod post cleanup", function()
 end)
 
 return FxFfbc

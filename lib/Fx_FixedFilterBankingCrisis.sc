@@ -1,15 +1,17 @@
 FxFixedFilterBankingCrisis : FxBase {
 	*new {
 		var ret = super.newCopyArgs(nil, \none, (
-			amp0: 0.1,
-			amp1: 0.3,
-			amp2: 0.0,
-			amp3: 0.5,
-			amp4: 0.0,
-			amp5: 0.0,
-			amp6: 0.2,
-			amp7: 0.0,
-			rq:   0.2,
+			amp0:      0.1,
+			amp1:      0.3,
+			amp2:      0.0,
+			amp3:      0.5,
+			amp4:      0.0,
+			amp5:      0.0,
+			amp6:      0.2,
+			amp7:      0.0,
+			rq:        0.2,
+			fb_amount: 0.0,
+			fb_delay:  0.1
 		), nil, 1);
 		^ret;
 	}
@@ -27,11 +29,12 @@ FxFixedFilterBankingCrisis : FxBase {
 	}
 
 	addSynthdefs {
-		SynthDef(\fxFfbc, { |inBus, outBus| //, rq=0.2, amp0=0.1, amp1=0.3, amp2=0, amp3=0.5, amp4=0, amp5=0, amp6=0.2, amp7=0|
+		// SynthDef(\fxFfbc, { |inBus, outBus| //, rq=0.2, amp0=0.1, amp1=0.3, amp2=0, amp3=0.5, amp4=0, amp5=0, amp6=0.2, amp7=0|
+		SynthDef(\fxFfbc, { |inBus, outBus, fb_amount=0.0, fb_delay=0.1|
 			var f0, f1, f2, f3, f4, f5, f6, f7;
-
-			var inputL = In.ar(inBus, 2)[0];
-			var inputR = In.ar(inBus, 2)[1];
+			var feedback = LocalIn.ar(2);
+			var inputL   = In.ar(inBus, 2)[0] + feedback[0];
+			var inputR   = In.ar(inBus, 2)[1] + feedback[1];
 
 			var filtersL = Mix.ar([
 				BPF.ar(inputL,    55, \rq.kr(1), \amp0.kr(1)),
@@ -55,7 +58,10 @@ FxFixedFilterBankingCrisis : FxBase {
 				BPF.ar(inputR, 11111*1.1, \rq.kr(1), \amp7.kr(1))
             ]);
 
-			Out.ar(outBus, [filtersL, filtersR])
+			feedback = AllpassC.ar([inputL, inputR], delaytime: Lag.kr(fb_delay.clip(0, 0.2)));
+			LocalOut.ar(feedback * Lag.kr(fb_amount.clip(-0.99, 0.99)));
+
+			Out.ar(outBus, [filtersL, filtersR]);
 		}).add;
 	}
 }
