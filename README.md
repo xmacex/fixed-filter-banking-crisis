@@ -19,6 +19,8 @@ Use <kbd>E1</kbd>, <kbd>E2</kbd> and <kbd>E3</kbd> to adjust the bands. More fun
 
 ![](fixed-filter-banking-crisis-touchosc.gif)
 
+Positive and negative crisis banking reverberation in the params.
+
 crow <kbd>input 1</kbd> selects one of the bands in ascending order with positive voltage, or *rq* with negative voltage. It is set to what <kbd>input 2</kbd> when a selection is made. crow <kbd>output 1</kbd> and <kbd>output 2</kbd> are envelope followers for left and right, respectively.
 
 Use grid to control the band amplitudes.

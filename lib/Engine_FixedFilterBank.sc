@@ -6,11 +6,12 @@ Engine_FixedFilterBank : CroneEngine {
 	}
 
 	alloc {
-		SynthDef(\fbb, { |inL, inR, out, rq=0.2, a0=0.1, a1=0.3, a2=0, a3=0.5, a4=0, a5=0, a6=0.2, a7=0|
+		SynthDef(\fbb, { |inL, inR, out, rq=0.2, a0=0.1, a1=0.3, a2=0, a3=0.5, a4=0, a5=0, a6=0.2, a7=0, fb_amount=0, fb_delay=0.2|
 			var f0, f1, f2, f3, f4, f5, f6, f7;
 
-			var inputL = SoundIn.ar(0);
-			var inputR = SoundIn.ar(1);
+		    var feedback = LocalIn.ar(2);
+		    var inputL = SoundIn.ar(0) + feedback[0];
+		    var inputR = SoundIn.ar(1) + feedback[1];
 
 			var filtersL = Mix.ar([
 				BPF.ar(inputL,    55, rq, a0),
@@ -34,7 +35,10 @@ Engine_FixedFilterBank : CroneEngine {
 				BPF.ar(inputR, 11111*1.1, rq, a7)
             ]);
 
-			Out.ar(out, [filtersL, filtersR])
+		    feedback = AllpassC.ar([inputL, inputR], delaytime: Lag.kr(fb_delay.clip(0, 0.2)));
+		    LocalOut.ar(feedback * Lag.kr(fb_amount.clip(-0.99, 0.99)));
+
+			Out.ar(out, [filtersL, filtersR]);
 		}).add;
 
 		context.server.sync;
@@ -82,6 +86,14 @@ Engine_FixedFilterBank : CroneEngine {
 
 		this.addCommand("amp7", "f", {|msg|
 			synth.set(\a7, msg[1]);
+		});
+
+		this.addCommand("fb_amount", "f", {|msg|
+		    synth.set(\fb_amount, msg[1]);
+		});
+
+		this.addCommand("fb_delay", "f", {|msg|
+		    synth.set(\fb_delay, msg[1]);
 		});
 	}
 

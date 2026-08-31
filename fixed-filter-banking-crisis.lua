@@ -15,6 +15,8 @@
 --
 -- by xmacex
 
+fmt = require 'formatters'
+
 local WIDTH  = 128
 local HEIGHT = 64
 
@@ -89,6 +91,13 @@ function init_params()
    params:add_control('rq', "rq", controlspec.RQ)
    params:set_action('rq', function(v) engine.rq(v) end)
    params:set('rq', 0.2)
+
+   params:add_taper('fb_amount', "fb gain", -0.99, 0.99, 0)
+   params:set_action('fb_amount', function(v)
+			engine.fb_amount(v) end)
+
+   params:add_taper('fb_delay', "fb delay", 0, 0.2, 0.1)
+   params:set_action('fb_delay', function(v) engine.fb_delay(v) end)
 
    params:add_taper('slew', "envelope smooth", 0, 1, 0.05, 0)
    params:set_action('slew', function(v)
